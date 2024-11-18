@@ -110,7 +110,13 @@ public class TicketReminder extends Plugin {
 	// Helper method to get the quantity of the ticket item in the inventory
 	private int getTicketQuantity() {
 		// Retrieve the inventory container
-		Item[] items = Objects.requireNonNull(client.getItemContainer(InventoryID.INVENTORY)).getItems();
+		ItemContainer inventoryContainer = client.getItemContainer(InventoryID.INVENTORY);
+
+		if (inventoryContainer == null) {
+			return 0;
+		}
+
+		Item[] items = inventoryContainer.getItems();
 
 		// Find the ticket item and return its quantity
 		for (Item item : items) {

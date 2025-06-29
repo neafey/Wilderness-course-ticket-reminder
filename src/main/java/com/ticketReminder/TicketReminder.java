@@ -3,13 +3,14 @@ package com.ticketReminder;
 import lombok.Getter;
 import net.runelite.api.*;
 import net.runelite.api.events.*;
+import net.runelite.api.gameval.ObjectID;
+import net.runelite.api.gameval.ItemID;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.callback.ClientThread;
 import javax.inject.Inject;
-import java.util.Objects;
 
 @PluginDescriptor(
 		name = "Wilderness Course Ticket Reminder",
@@ -41,9 +42,6 @@ public class TicketReminder extends Plugin {
 
 	// Constants
 	private static final int EXPECTED_XP_FOR_LAP = 499; // Xp drop for completing a lap
-	private static final int TICKET_ITEM_ID = 29460; // Ticket item ID
-	private static final int PIPE_OBJECT_ID = 23137; // Pipe obstacle object ID
-	private static final int DISPENSER_OBJECT_ID = 53224; // Dispenser object ID	
 
 
 	@Override
@@ -92,7 +90,7 @@ public class TicketReminder extends Plugin {
 	public void onMenuEntryAdded(MenuEntryAdded event) {
 		if (lapCompleted) {
 			// Check if the menu entry is for the pipe obstacle
-			if (event.getOption().equals("Squeeze-through") && event.getIdentifier() == PIPE_OBJECT_ID) {
+			if (event.getOption().equals("Squeeze-through") && event.getIdentifier() == ObjectID.OBSTICAL_PIPE2) {
 				event.getMenuEntry().setDeprioritized(true);
 			}
 		}
@@ -102,7 +100,7 @@ public class TicketReminder extends Plugin {
 	@Subscribe
 	public void onGameObjectSpawned(GameObjectSpawned event) {
 		GameObject object = event.getGameObject();
-		if (object.getId() == DISPENSER_OBJECT_ID) {
+		if (object.getId() == ObjectID.WILDY_AGILITY_PILLAR) {
 			dispenserObject = object;
 		}
 	}
@@ -120,7 +118,7 @@ public class TicketReminder extends Plugin {
 
 		// Find the ticket item and return its quantity
 		for (Item item : items) {
-			if (item.getId() == TICKET_ITEM_ID) {
+			if (item.getId() == ItemID.WILDY_AGILITY_TOKEN) {
 				return item.getQuantity();
 			}
 		}

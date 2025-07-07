@@ -21,6 +21,8 @@ public class TicketReminderOverlay extends Overlay {
     @Override
     public Dimension render(Graphics2D graphics) {
         GameObject dispenser = plugin.getDispenserObject();
+		if (dispenser == null)
+			return null;
         Shape dispenserClickbox = dispenser.getClickbox();
         if (plugin.isLapCompleted()) {
             if (dispenserClickbox != null) {
